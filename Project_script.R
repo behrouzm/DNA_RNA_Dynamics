@@ -220,3 +220,22 @@ order_chr <- c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "1
 Man_data$CHR <- as.numeric(factor(Man_data$CHR, levels = order_chr))
 manhattan(Man_data, snp = "IlmnID", chr = "CHR", bp = "MAPINFO", p = "p_value_t_test", col = brewer.pal(n = 6, "Purples"), genomewideline = F, cex = 0.5, cex.axis = 0.4)
 
+### HEATMAP
+#Creating a matrix containing our input data for the heatmaps
+colorbar <- c("#377eb8", "#d95f02", "#377eb8", "#377eb8", "#d95f02", "#d95f02", "#377eb8", "#d95f02")
+my_col_2 = colorRampPalette(c("#4daf4a", "black", "#e41a1c"))(100)
+library(gplots)
+t_test_df_corrected <- data.frame(t_test_df, p_value_Bon, p_value_BH)
+heatmap_data = as.matrix(t_test_df_corrected[1:100, 1:8]) 
+
+#Average linkage method
+{heatmap.2(heatmap_data, col = my_col_2, Rowv = T, Colv = T, hclustfun = function(x) hclust(x, method = 'average'), dendrogram = "both", key = T, ColSideColors = colorbar, density.info = "none", trace = "none", scale = "none", symm = F, main = "Average linkage")
+  legend(legend = c("MUT", "WT"), col = c("#d95f02", "#377eb8"), "topright", pch = 15, bty = "n", cex = 0.7)}
+
+#Single linkage method
+{heatmap.2(heatmap_data, col = my_col_2, Rowv = T, Colv = T, hclustfun = function(x) hclust(x, method = 'single'), dendrogram = "both", key = T, ColSideColors = colorbar, density.info = "none", trace = "none", scale = "none", symm = F, main = "Single linkage")
+  legend(legend = c("MUT", "WT"), col = c("#d95f02", "#377eb8"), "topright", pch = 15, bty = "n", cex = 0.7)}
+
+#Complete linkage method
+{heatmap.2(heatmap_data, col = my_col_2, Rowv = T, Colv = T, dendrogram = "both", key = T, ColSideColors = colorbar, density.info = "none", trace = "none", scale = "none", symm = F, main = "Complete linkage")
+  legend(legend = c("MUT", "WT"), col = c("#d95f02", "#377eb8"), "topright", pch = 15, bty = "n", cex = 0.7)}
